@@ -1,8 +1,9 @@
+using Game.Scripts.Authentication;
 using Unity.Services.Authentication.PlayerAccounts;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.Scripts.Connection {
+namespace Game.Scripts.Windows {
     public class UnityDataRegistryWindow : MonoBehaviour {
          public Button connectButton;
          private void OnEnable() {
@@ -19,7 +20,7 @@ namespace Game.Scripts.Connection {
                  Action = () => PlayerAccountService.Instance.StartSignInAsync()
              };
              
-             Authenticate.Instance.AuthenticateClient(connectionAction);
+             //Authenticate.Instance.AuthenticateClient(connectionAction);
          }
      }
 }

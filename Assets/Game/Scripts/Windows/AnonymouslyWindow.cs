@@ -1,9 +1,8 @@
-using System.Threading.Tasks;
-using Unity.Services.Authentication;
+using Game.Scripts.Authentication;
 using UnityEngine.UI;
 using UnityEngine;
 
-namespace Game.Scripts.Connection {
+namespace Game.Scripts.Windows {
     public class AnonymouslyWindow : MonoBehaviour {
         public Button connectButton;
 
@@ -16,11 +15,12 @@ namespace Game.Scripts.Connection {
         }
 
         private void ConnectAnonymously() {
-            var connectionAction = new AuthenticateAction { 
-                Action = () =>  AuthenticationService.Instance.SignInAnonymouslyAsync()
+            var connectionAction = new AuthOperation { 
+                Action = new AnonymouslyAuthenticator(),
+                OperationMessage = "Authenticating"
             };
             
-            Authenticate.Instance.AuthenticateClient(connectionAction);
+            Authenticate.Instance.SignInClient(connectionAction);
         }
     }
 }

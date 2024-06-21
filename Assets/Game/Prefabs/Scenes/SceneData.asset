@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a648ca633e46b48bc99ddff266c0df, type: 3}
   m_Name: SceneData
   m_EditorClassIdentifier: 
-  sceneTypes: 0100000002000000
+  sceneTypes: 01000000020000000b000000
   scenes:
   - assetPath: Assets/Game/Scenes/Bootstrap.unity
-  - assetPath: Assets/Game/Scenes/Authentications/UnityAuth.unity
+  - assetPath: Assets/Game/Scenes/Singin.unity
+  - assetPath: Assets/Game/Scenes/ConnectionScene.unity

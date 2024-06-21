@@ -1,7 +1,10 @@
+using Game.Scripts.Scene;
 using UnityEngine;
 
-public class BackWindow : MonoBehaviour {
+namespace Game.Scripts.Windows {
+    public class BackWindow : MonoBehaviour {
 
-    public void BackToBootstrap(SceneType type) => SceneLoader.Instance.Load(type);
+        public void BackToBootstrap(SceneType type) => SceneLoader.Instance.Load(type);
 
+    }
 }
