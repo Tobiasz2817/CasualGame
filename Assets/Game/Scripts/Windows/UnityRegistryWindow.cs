@@ -1,4 +1,8 @@
-using Game.Scripts.Authentication;
+using System.Threading.Tasks;
+using Game.Scripts.Scene;
+using Game.Scripts.Utils;
+using Unity.Services.Authentication;
+using Unity.Services.Authentication.PlayerAccounts;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -20,13 +24,17 @@ namespace Game.Scripts.Windows {
         }
 
         private void ConnectWithUnityService() {
-            var connection = new AuthOperation {
-                Action = new UnityAuthenticator(delayBetweenRegistry),
-                OperationMessage = "Login in website"
-            };
+            var task = new TaskProcessor(() => Task.WhenAll(
+                PlayerAccountService.Instance.StartSignInAsync(),
+                Task.Delay(delayBetweenRegistry),
+                AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken)
+            ));
+
+            task.OnExecute += () => { LoaderListener.Instance.Load("Login in website"); };
+            task.OnFailedExecute += () => { LoaderListener.Instance.Break(); };
+            task.OnSuccessExecute += () => { SceneLoader.Instance.Load(SceneType.MainMenu); };
             
-            Authenticate.Instance.SignInClient(connection);
-            LoaderListener.Instance.Load(Authenticate.Instance.Operation.OperationMessage);
+            task.ExecuteTask();
         }
     }
 }

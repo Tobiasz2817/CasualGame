@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Game.Scripts.Windows {
     public class SpinningLoader : MonoBehaviour
@@ -29,22 +30,36 @@ namespace Game.Scripts.Windows {
             EndOfFrame = new WaitForEndOfFrame();   
             openDuration = openCurve.length;
             closeDuration = closeCurve.length;
+            
+            SceneManager.sceneLoaded += CallDisableInterface;
         }
-    
+        
+        private void OnDestroy() {
+            SceneManager.sceneLoaded -= CallDisableInterface;
+        }
+
+        private void CallDisableInterface(UnityEngine.SceneManagement.Scene x, LoadSceneMode y) {
+            if (!DisableOnNewScene) return;
+            
+            DisableInterface();
+        }
+        
         public void EnableInterface() {
             canvasGroup.blocksRaycasts = true;
             ShowLoadingUI();
         }
     
         public void DisableInterface() {
-            if (!DisableOnNewScene) return;
             canvasGroup.blocksRaycasts = false;
             CloseLoadingUI();
+        }
+
+        public void RefreshInterface() {
+            StopAllCoroutines();
         }
     
         private void ShowLoadingUI() {
             displayText.text = Message;
-            Debug.Log(displayText.text);
             StartCoroutine(ShowLoadingUICoroutine());
             StartCoroutine(SpinningSprite());
         }

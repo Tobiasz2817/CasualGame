@@ -1,5 +1,8 @@
+using System.Threading.Tasks;
 using Game.Scripts.Authentication;
 using Game.Scripts.Scene;
+using Game.Scripts.Utils;
+using Unity.Services.Authentication;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -15,17 +18,26 @@ namespace Game.Scripts.Windows {
         private void OnDisable() {
             button.onClick.RemoveListener(LogOff);
         }
+        
+        
 
         private void LogOff() {
             SceneLoader.Instance.Next = backWindow;
-            
-            var authOperation = new AuthOperation {
-                Action =  new LogOffOperation(),
-                OperationMessage = "Logging off..."
+            var logOffTask = new TaskProcessor(() => Task.WhenAll(
+                Task.Run(() => AuthenticationService.Instance.SignOut()),
+                Task.Delay(2000))
+            );
+            logOffTask.OnExecute += () => {
+                LoaderListener.Instance.Load("Logging off...");
             };
-            
-            Authenticate.Instance.SignOutClient(authOperation);   
-            LoaderListener.Instance.Load(Authenticate.Instance.Operation.OperationMessage);
+            logOffTask.OnFailedExecute += () => {
+                LoaderListener.Instance.Break();
+            };
+            logOffTask.OnSuccessExecute += () => {
+                SceneLoader.Instance.Load();
+            };
+
+            logOffTask.ExecuteTask();
         }
     }
 }

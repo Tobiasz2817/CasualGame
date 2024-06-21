@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Game.Scripts.Windows {
+    //TODO: Other auth solution
     public class UnityDataRegistryWindow : MonoBehaviour {
          public Button connectButton;
          private void OnEnable() {
@@ -15,12 +16,7 @@ namespace Game.Scripts.Windows {
          }
 
          private void ConnectWithUnityService() {
-             var connectionAction = new AuthenticateAction {
-                 //Action = () => AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken)
-                 Action = () => PlayerAccountService.Instance.StartSignInAsync()
-             };
              
-             //Authenticate.Instance.AuthenticateClient(connectionAction);
          }
      }
 }

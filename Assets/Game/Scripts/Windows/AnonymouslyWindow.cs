@@ -1,4 +1,7 @@
 using Game.Scripts.Authentication;
+using Game.Scripts.Scene;
+using Game.Scripts.Utils;
+using Unity.Services.Authentication;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -15,14 +18,11 @@ namespace Game.Scripts.Windows {
         }
 
         private void ConnectAnonymously() {
-            var connectionAction = new AuthOperation { 
-                Action = new AnonymouslyAuthenticator(),
-                OperationMessage = "Authenticating"
-            };
-            
-            
-            Authenticate.Instance.SignInClient(connectionAction);
-            LoaderListener.Instance.Load(Authenticate.Instance.Operation.OperationMessage);
+            var task = new TaskProcessor(() => AuthenticationService.Instance.SignInAnonymouslyAsync());
+            task.OnExecute += () => { LoaderListener.Instance.Load("Authorizing..."); };
+            task.OnFailedExecute += () => { LoaderListener.Instance.Break(); };
+            task.OnSuccessExecute += () => { SceneLoader.Instance.Load(SceneType.MainMenu); };
+            task.ExecuteTask();
         }
     }
 }

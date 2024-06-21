@@ -8,6 +8,14 @@ namespace Game.Scripts.Windows {
         private SpinningLoader _loader;
     
         public void Load(string message) {
+            if (_loader != null) {
+                _loader.Message = message;
+                _loader.RefreshInterface();
+                _loader.EnableInterface();
+
+                return;
+            }
+            
             _loader = Instantiate(_loaderPrefab);
             _loader.Message = message;
             _loader.EnableInterface();
