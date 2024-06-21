@@ -1,9 +1,7 @@
-using System;
 using Game.Scripts.Authentication;
 using Game.Scripts.Scene;
-using Unity.Services.Authentication;
-using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
 
 namespace Game.Scripts.Windows {
     public class LogOffWindow : MonoBehaviour {
@@ -20,8 +18,14 @@ namespace Game.Scripts.Windows {
 
         private void LogOff() {
             SceneLoader.Instance.Next = backWindow;
-            LoaderListener.Instance.Load("Logging Off..");
-            Authenticate.Instance.SignOutClient();   
+            
+            var authOperation = new AuthOperation {
+                Action =  new LogOffOperation(),
+                OperationMessage = "Logging off..."
+            };
+            
+            Authenticate.Instance.SignOutClient(authOperation);   
+            LoaderListener.Instance.Load(Authenticate.Instance.Operation.OperationMessage);
         }
     }
 }

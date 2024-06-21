@@ -19,9 +19,7 @@ namespace Game.Scripts.Authentication {
 
         public bool autoInit = true;
     
-        public event Action SigningIn;
         public event Action<AuthenticateStatus> SignedIn;
-        public event Action SigningOut;
         public event Action<AuthenticateStatus> SignedOut;
         public event Action OnInitializeService;
 
@@ -38,16 +36,18 @@ namespace Game.Scripts.Authentication {
         public async void SignInClient(AuthOperation operation) {
             if (IsServiceUnInitialized())
                 InitializeService();
-        
+            
+            _status = AuthenticateStatus.Initializing;
+            _operation = operation;
+            
             if (IsAuthorized) {
                 Debug.LogWarning("Client is signed in");
+
+                _operation.OperationMessage = "Is already signed in";
+                SignedIn?.Invoke(AuthenticateStatus.Failed);
                 return;
             }
-        
-            _operation = operation;
-            _status = AuthenticateStatus.Initializing;
-            SigningIn?.Invoke();
-
+            
             try {
                 await TaskExtension.While(() => !IsServiceInitialized(), _initExceptionTime);
                 await operation.Action.ExecuteAsync();
@@ -66,15 +66,24 @@ namespace Game.Scripts.Authentication {
         }
         
         //TODO::
-        public async void SignOutClient() {
+        public async void SignOutClient(AuthOperation operation) {
+            _status = AuthenticateStatus.Initializing;
+            _operation = operation;
+            
             if (!IsAuthorized) {
                 Debug.LogWarning("Client is not signed");
                 return;
             }
             
-            AuthenticationService.Instance.SignOut();
+            try {
+                await operation.Action.ExecuteAsync();
+                await Task.Delay(1000);
+            }
+            catch (Exception ex) when (ex is AuthenticationException or RequestFailedException) {
+                Debug.LogException(ex);
+                _operation.OperationMessage = _status.ToString();
+            }
             
-            SigningOut?.Invoke();
             SignedOut?.Invoke(_status);
         }
     

@@ -26,6 +26,7 @@ namespace Game.Scripts.Windows {
             };
             
             Authenticate.Instance.SignInClient(connection);
+            LoaderListener.Instance.Load(Authenticate.Instance.Operation.OperationMessage);
         }
     }
 }

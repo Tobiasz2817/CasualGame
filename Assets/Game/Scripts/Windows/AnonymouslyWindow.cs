@@ -20,7 +20,9 @@ namespace Game.Scripts.Windows {
                 OperationMessage = "Authenticating"
             };
             
+            
             Authenticate.Instance.SignInClient(connectionAction);
+            LoaderListener.Instance.Load(Authenticate.Instance.Operation.OperationMessage);
         }
     }
 }
