@@ -1,13 +1,14 @@
 using System.Threading.Tasks;
+using Game.Scripts.Loader;
 using Game.Scripts.Scene;
 using Game.Scripts.Utils;
 using Unity.Services.Authentication;
 using Unity.Services.Authentication.PlayerAccounts;
-using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
-namespace Game.Scripts.Windows {
-    public class UnityRegistryWindow : MonoBehaviour {
+namespace Game.Scripts.Handler {
+    public class UnityRegistryHandler : MonoBehaviour {
         public Button connectButton;
         public int delayBetweenRegistry = 1000;
         private void OnEnable() {
@@ -24,10 +25,10 @@ namespace Game.Scripts.Windows {
         }
 
         private void ConnectWithUnityService() {
-            var task = new TaskProcessor(() => Task.WhenAll(
-                PlayerAccountService.Instance.StartSignInAsync(),
-                Task.Delay(delayBetweenRegistry),
-                AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken)
+            var task = new TaskProcessor(() => TaskExtension.WhenAll(
+                () => PlayerAccountService.Instance.StartSignInAsync(),
+                () => Task.Delay(delayBetweenRegistry),
+                () => AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken)
             ));
 
             task.OnExecute += () => { LoaderListener.Instance.Load("Login in website"); };

@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections;
+using System.Threading.Tasks;
+using Game.Scripts.Loader;
 using Game.Scripts.Scene;
 using Game.Scripts.Utils;
-using Game.Scripts.Windows;
 using Unity.Services.Core;
 using UnityEngine;
 
@@ -12,10 +14,11 @@ namespace Game.Scripts.Authentication {
         }
 
         private void Registry() {
-            var logOffTask = new TaskProcessor(() => Task.WhenAll(
-                UnityServices.InitializeAsync(),
-                Task.Delay(2000))
-            );
+            var logOffTask = new TaskProcessor(() => TaskExtension.WhenAll(
+                 UnityServices.InitializeAsync,
+                 () => Task.Delay(2000)
+                ));
+            
             logOffTask.OnExecute += () => {
                 LoaderListener.Instance.Load("Initialize Service...");
             };
@@ -23,8 +26,19 @@ namespace Game.Scripts.Authentication {
             logOffTask.OnSuccessExecute += () => {
                 SceneLoader.Instance.Load(SceneType.Signin);
             };
+            
+            //Test
 
             logOffTask.ExecuteTask();
+        }
+    }
+    
+
+    public class TaskRunner {
+        public Task task;
+
+        public TaskRunner(ref Task tsk) {
+            task = tsk;
         }
     }
 }

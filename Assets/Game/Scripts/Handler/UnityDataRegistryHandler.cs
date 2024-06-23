@@ -1,11 +1,9 @@
-using Game.Scripts.Authentication;
-using Unity.Services.Authentication.PlayerAccounts;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.Scripts.Windows {
+namespace Game.Scripts.Handler {
     //TODO: Other auth solution
-    public class UnityDataRegistryWindow : MonoBehaviour {
+    public class UnityDataRegistryHandler : MonoBehaviour {
          public Button connectButton;
          private void OnEnable() {
              connectButton.onClick.AddListener(ConnectWithUnityService);

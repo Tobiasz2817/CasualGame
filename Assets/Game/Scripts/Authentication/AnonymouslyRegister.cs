@@ -1,11 +1,11 @@
-using Game.Scripts.Authentication;
+using Game.Scripts.Loader;
 using Game.Scripts.Scene;
 using Game.Scripts.Utils;
 using Unity.Services.Authentication;
-using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
-namespace Game.Scripts.Windows {
+namespace Game.Scripts.Authentication {
     public class AnonymouslyWindow : MonoBehaviour {
         public Button connectButton;
 

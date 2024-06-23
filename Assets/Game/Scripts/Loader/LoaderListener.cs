@@ -1,7 +1,7 @@
 using Game.Scripts.Utils;
 using UnityEngine;
 
-namespace Game.Scripts.Windows {
+namespace Game.Scripts.Loader {
     [DefaultExecutionOrder(-999)]
     public class LoaderListener : Singleton<LoaderListener> {
         [SerializeField] private SpinningLoader _loaderPrefab;

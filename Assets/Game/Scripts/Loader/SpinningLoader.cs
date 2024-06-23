@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Game.Scripts.Windows {
+namespace Game.Scripts.Loader {
     public class SpinningLoader : MonoBehaviour
     {
         public GameObject spin;
