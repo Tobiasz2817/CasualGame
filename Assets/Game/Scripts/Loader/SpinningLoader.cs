@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -23,6 +24,8 @@ namespace Game.Scripts.Loader {
         private float openDuration, closeDuration;
         private WaitForEndOfFrame EndOfFrame;
 
+        private Coroutine _loadingCoroutine;
+
         public string Message { set; get; }
 
         private void Awake() {
@@ -36,6 +39,13 @@ namespace Game.Scripts.Loader {
         
         private void OnDestroy() {
             SceneManager.sceneLoaded -= CallDisableInterface;
+        }
+        
+        public void UpdateMessage(string message) {
+            if (message == Message) return;
+            
+            Message = message;
+            displayText.text = Message;
         }
 
         private void CallDisableInterface(UnityEngine.SceneManagement.Scene x, LoadSceneMode y) {
@@ -53,23 +63,23 @@ namespace Game.Scripts.Loader {
             canvasGroup.blocksRaycasts = false;
             CloseLoadingUI();
         }
-
-        public void RefreshInterface() {
-            StopAllCoroutines();
-        }
     
         private void ShowLoadingUI() {
-            displayText.text = Message;
-            StartCoroutine(ShowLoadingUICoroutine());
-            StartCoroutine(SpinningSprite());
+            if(_loadingCoroutine != null)
+                StopCoroutine(_loadingCoroutine);
+            
+            _loadingCoroutine = StartCoroutine(ShowLoadingUICoroutine());
         }
         
         private void CloseLoadingUI() {
-            StartCoroutine(CloseLoadingUICoroutine());
+            if(_loadingCoroutine != null)
+                StopCoroutine(_loadingCoroutine);
+            
+            _loadingCoroutine = StartCoroutine(CloseLoadingUICoroutine());
         }
 
         IEnumerator ShowLoadingUICoroutine() {
-            float timer = 0;
+            float timer = canvasGroup.alpha;
             int a = 0;
             int b = 1;
             
@@ -88,7 +98,7 @@ namespace Game.Scripts.Loader {
         }
         
         IEnumerator CloseLoadingUICoroutine() {
-            float timer = 0;
+            float timer = 1 - canvasGroup.alpha;
             int a = 0;
             int b = 1;
             
@@ -107,7 +117,11 @@ namespace Game.Scripts.Loader {
 
             Destroy(gameObject);
         }
-    
+
+        private void Update() {
+            if(canvasGroup.alpha > 0)
+                Spinning();
+        }
 
         private IEnumerator SpinningSprite() {
             while (canvasGroup.alpha > 0) {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Game.Scripts.Utils;
+using UnityEngine;
 
 namespace Game.Scripts.Window {
     public class WindowManager : Singleton<WindowManager> {
@@ -12,9 +13,9 @@ namespace Game.Scripts.Window {
 
         public override void Awake() {
             base.Awake();
-            var panels = GetComponentsInChildren<WindowPanel>();
+            var panels = GetComponentsInChildren<WindowPanel>(true);
             _panels.AddRange(panels);
-
+            
             EnableWindowWithDisableOthers(GetPanel(startWindow));
         }
 
@@ -32,7 +33,7 @@ namespace Game.Scripts.Window {
         
         public void EnableWindowWithDisableOthers(WindowPanel windowPanel) {
             if (windowPanel == null) return;
-
+            
             windowPanel.EnableWindow();
 
             foreach (var panel in _panels) {

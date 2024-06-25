@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Game.Scripts.Loader;
 using Game.Scripts.Scene;
 using Game.Scripts.Utils;
+using Unity.Services.Authentication;
 using Unity.Services.Core;
 using UnityEngine;
 
@@ -24,6 +25,9 @@ namespace Game.Scripts.Authentication {
             };
             logOffTask.OnFailedExecute += Registry;
             logOffTask.OnSuccessExecute += () => {
+#if UNITY_EDITOR
+                AuthenticationService.Instance.ClearSessionToken();
+#endif
                 SceneLoader.Instance.Load(SceneType.Signin);
             };
             

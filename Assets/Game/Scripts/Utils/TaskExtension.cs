@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Scripts.Utils {
     public static class TaskExtension {
-        public static async Task While(Func<bool> condition, int frequency = 25, int timeout = -1)
+        public static async Task WhileUntil(Func<bool> condition, int frequency = 25, int timeout = -1)
         {
             var waitTask = Task.Run(async () => {
                 while (condition()) await Task.Delay(frequency);

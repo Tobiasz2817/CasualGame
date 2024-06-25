@@ -2,6 +2,6 @@
     public enum WindowType {
         Play = 0,
         News = 1,
-        Settings = 2
+        Settings = 2,
     }
 }
