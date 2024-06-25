@@ -35,7 +35,7 @@ namespace Game.Scripts.LobbySystem {
         }
         
         private void CheckLobby(Lobby lobby) {
-            Data.Lobby = IsInLobby(lobby) ? lobby : null;
+            Data.Lobby = lobby;
         }
 
         private void UpdateLobby(Lobby lobby) {
@@ -46,8 +46,6 @@ namespace Game.Scripts.LobbySystem {
             if (obj == LobbyExceptionReason.LobbyNotFound) {
                 Data.Lobby = null;
             }
-            
-            //Debug.Log(obj);
         }
         
         private void UpdateLobby() {

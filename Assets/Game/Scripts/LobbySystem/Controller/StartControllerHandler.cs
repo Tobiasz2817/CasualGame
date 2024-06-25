@@ -18,7 +18,6 @@ namespace Game.Scripts.LobbySystem.Controller {
         }
         
         private void ChangeVisibly(Lobby obj) {
-            Debug.Log("PlayerId: " + AuthenticationService.Instance.PlayerId);
             if (LobbyManager.Instance == null) return;
             
             var isHost = LobbyManager.Instance.IsLobbyHost(obj.HostId);
