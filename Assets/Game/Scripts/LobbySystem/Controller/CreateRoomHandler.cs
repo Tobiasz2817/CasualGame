@@ -50,8 +50,6 @@ namespace Game.Scripts.LobbySystem.Controller {
                 WithName("Creating room...").
                 WithCondition(CreateRoomRateLimit).
                 PushInQueue(LobbyJobId.CreateRoom);
-            
-            Debug.Log("Create Room");
         }
 
         private Task CreateRoom() => CreateRoomService.CreateRoom(_roomName, _playersCount);

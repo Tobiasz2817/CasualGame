@@ -1,5 +1,8 @@
 using System.Threading.Tasks;
+using Game.Scripts.JobSystem;
 using Game.Scripts.Loader;
+using Game.Scripts.LobbySystem;
+using Game.Scripts.LobbySystem.Service;
 using Game.Scripts.Scene;
 using Game.Scripts.Utils;
 using Unity.Services.Authentication;
@@ -22,6 +25,8 @@ namespace Game.Scripts.Handler {
         
 
         private void LogOff() {
+            
+            
             SceneLoader.Instance.Next = backWindow;
             var logOffTask = new TaskProcessor(() => TaskExtension.WhenAll(
                 () => Task.Run(() => AuthenticationService.Instance.SignOut()),
@@ -35,6 +40,13 @@ namespace Game.Scripts.Handler {
                 LoaderListener.Instance.Break();
             };
             logOffTask.OnSuccessExecute += () => {
+                JobScheduler.Instance.QueueTask(() => DeleteRoomService.DeleteRoom(LobbyManager.Instance.Data.Lobby?.Id)).
+                    WithTask(() => Task.Delay(1000)).
+                    WithCondition(() => DeleteRoomService.Limited.CanInvoke()).
+                    PushInQueue(LobbyJobId.DeleteRoom);
+#if UNITY_EDITOR
+                AuthenticationService.Instance.ClearSessionToken();
+#endif
                 SceneLoader.Instance.Load();
             };
 

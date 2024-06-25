@@ -38,8 +38,6 @@ namespace Game.Scripts.LobbySystem.Service {
         public static async Task JoinRoom(string  lobbyId, JoinLobbyByIdOptions options = null) {
             try {
                 
-                Debug.Log("Current " + Limited._currentCalls);
-
                 if (!Limited.CanInvoke()) 
                     throw new Exception("Over Rate limited");
             

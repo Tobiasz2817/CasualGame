@@ -17,7 +17,6 @@ namespace Game.Scripts.LobbySystem.Controller {
         
         private void OnEnable() {
             _joinButton.onClick.AddListener(JoinToLobby);
-            JoinRoomService.OnFailed += (xd) => Debug.Log("XD " + xd);
         }
         
         private void OnDisable() {
